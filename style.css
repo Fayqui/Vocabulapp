@@ -2644,9 +2644,9 @@ body{
 
   .bg-biblioteca #screenThemes,
   #screenThemes{
-    min-height: auto !important;
+    min-height: 100vh !important;
     height: auto !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   .themes-layout{
