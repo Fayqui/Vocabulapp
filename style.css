@@ -4026,6 +4026,26 @@ body{
   white-space: nowrap !important;
 }
 
+#screenGame.gameplay-clean #btnExitGame{
+  position: static !important;
+  flex: 0 0 auto !important;
+  width: 120px !important;
+  height: 48px !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+  background-image: url("assets/btn-salir.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  z-index: auto !important;
+}
 
 /* BARRA */
 #screenGame.gameplay-clean #progressWrap{
@@ -4218,7 +4238,7 @@ body{
 ========================= */
 
 #screenGame.gameplay-clean .gameplay-hud{
-  top: 12.5% !important;
+  top: 15.5% !important;
   width: 72% !important;
 }
 
@@ -4303,28 +4323,137 @@ body{
   z-index: 99999 !important;
 }
 
-@media screen and (max-width: 1180px){
-  #screenGame.gameplay-clean .gameplay-hud{
-    top: 10% !important;
+/* =========================================================
+   TEMAS - SEPARACIÓN DEFINITIVA PC / iPAD TÁCTIL
+   Mantiene EXACTAMENTE los valores ya afinados por el usuario
+   ========================================================= */
+
+/* =========================
+   ESCRITORIO / PORTÁTIL
+   Valores PC exactos
+   ========================= */
+@media screen and (min-width: 981px) and (hover: hover) and (pointer: fine) {
+
+  .themes-layout{
+    display: grid !important;
+    grid-template-columns: minmax(720px, 1fr) 320px !important;
+    gap: 16px !important;
+    align-items: start !important;
   }
 
-  #screenGame.gameplay-clean .game-board .board{
-    height: 280px !important;
+  .themes-left{
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .themes-header{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    margin-bottom: 16px !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .themes-logo img{
+    width: 800px !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    filter: none !important;
+  }
+
+  .themes-actions{
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 0 !important;
+  }
+
+  .themed-image-btn{ height: 64px !important; }
+
+  #btnChangeLanguage,
+  #btnResumeGame,
+  #btnDeleteSave,
+  #btnAddTheme{
+    width: 175px !important;
+    height: 64px !important;
+  }
+
+  .themes-panel-image{
+    position: relative !important;
+    width: 100% !important;
+    max-width: 930px !important;
+  }
+
+  .themes-content{
+    position: absolute !important;
+    top: 122px !important;
+    left: 52px !important;
+    right: 52px !important;
+    bottom: 42px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .themes-character-slot{
+    min-height: 620px !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    position: relative !important;
+    padding-top: 20px !important;
+  }
+
+  #monsieurBete{
+    display: block !important;
+    width: auto !important;
+    max-width: 430px !important;
+    max-height: none !important;
+    height: auto !important;
+    transform: translate(-45px, -20px) !important;
+    pointer-events: none !important;
+    user-select: none !important;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.45)) !important;
+    z-index: 2 !important;
+  }
+
+  .tutorial-bubble{
+    position: absolute !important;
+    top: 165px !important;
+    right: 235px !important;
+    width: 440px !important;
+    height: 293px !important;
+  }
+
+  .tutorial-bubble__text{
+    position: absolute !important;
+    top: 64px !important;
+    left: 55px !important;
+    right: 78px !important;
+    bottom: 78px !important;
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+  }
+
+  .tutorial-bubble__arrow{
+    position: absolute !important;
+    right: 218px !important;
+    bottom: 22px !important;
+    font-size: 42px !important;
   }
 }
 
-@media screen and (max-width: 1180px){
-  #screenConfig #btnBack{
-    top: 82px !important;
-    left: 170px !important;
-  }
-}
-
-/* =========================================
-   iPAD HORIZONTAL - TEMAS como en PC
-   Pegar AL FINAL del CSS
-   ========================================= */
-@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) {
+/* =========================
+   iPAD TÁCTIL HORIZONTAL
+   Valores iPad exactos
+   ========================= */
+@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
 
   .themes-layout{
     grid-template-columns: minmax(0, 1fr) 250px !important;
@@ -4391,288 +4520,9 @@ body{
     line-height: 1.2 !important;
   }
 
-
-/* =========================================
-   iPAD / SAFARI - subir botón Continuar
-   Pantallas Fase / Victory / Final
-   ========================================= */
-@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) {
-  .phase-content button,
-  #btnContinuePhase{
-    bottom: 86px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    min-width: 170px !important;
-    min-height: 54px !important;
-    z-index: 30 !important;
-  }
-
-  .phase-content button:hover,
-  #btnContinuePhase:hover{
-    transform: translateX(-50%) scale(1.03) !important;
-  }
-}
   .tutorial-bubble__arrow{
     right: 218px !important;
     bottom: 22px !important;
     font-size: 42px !important;
   }
-}
-
-/* =========================================
-   iPAD / SAFARI - quitar selección azul en cartas
-   ========================================= */
-#screenGame .card-item,
-#screenGame .card-inner,
-#screenGame .card-face{
-  -webkit-tap-highlight-color: transparent !important;
-  -webkit-touch-callout: none !important;
-  user-select: none !important;
-  -webkit-user-select: none !important;
-  outline: none !important;
-}
-
-#screenGame .card-item:focus,
-#screenGame .card-item:active,
-#screenGame .card-inner:focus,
-#screenGame .card-inner:active,
-#screenGame .card-face:focus,
-#screenGame .card-face:active{
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-#screenGame .board{
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-
-
-
-
-/* =========================================
-   iPAD - bajar panel de configuración
-   ========================================= */
-@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape){
-  .config-layout{
-    margin-top: 48px !important;
-  }
-}
-
-
-
-
-
-/* =========================================
-   FINAL OVERRIDES - TEMAS DESKTOP vs iPAD TÁCTIL
-   Añadido para evitar que los media queries de tablet
-   afecten al escritorio en GitHub Pages.
-   ========================================= */
-
-/* ESCRITORIO / PORTÁTIL */
-@media screen and (min-width: 981px) and (hover: hover) and (pointer: fine) {
-
-  .themes-layout{
-    grid-template-columns: minmax(720px, 1fr) 320px !important;
-    gap: 16px !important;
-    align-items: start !important;
-  }
-
-  .themes-left{
-    max-width: none !important;
-    min-width: 0 !important;
-  }
-
-  .themes-header{
-    gap: 4px !important;
-    margin-bottom: 16px !important;
-    padding: 0 !important;
-  }
-
-  .themes-logo img{
-    width: 800px !important;
-    max-width: 100% !important;
-    height: auto !important;
-    display: block !important;
-    filter: none !important;
-  }
-
-  .themes-actions{
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    gap: 8px !important;
-    margin-top: 0 !important;
-  }
-
-  #btnChangeLanguage,
-  #btnResumeGame,
-  #btnDeleteSave,
-  #btnAddTheme{
-    width: 175px !important;
-    height: 64px !important;
-  }
-
-  .themes-panel-image{
-    max-width: 930px !important;
-  }
-
-  .themes-content{
-    top: 122px !important;
-    left: 52px !important;
-    right: 52px !important;
-    bottom: 42px !important;
-  }
-
-  .themes-character-slot{
-    min-height: 620px !important;
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-    overflow: visible !important;
-    position: relative !important;
-    padding-top: 20px !important;
-  }
-
-  #monsieurBete{
-    max-width: 430px !important;
-    width: auto !important;
-    height: auto !important;
-    transform: translate(-45px, -20px) !important;
-  }
-
-  .tutorial-bubble{
-    top: 165px !important;
-    right: 235px !important;
-    width: 440px !important;
-    height: 293px !important;
-  }
-
-  .tutorial-bubble__text{
-    top: 64px !important;
-    left: 55px !important;
-    right: 78px !important;
-    bottom: 78px !important;
-    font-size: 24px !important;
-    line-height: 1.2 !important;
-  }
-
-  .tutorial-bubble__arrow{
-    right: 218px !important;
-    bottom: 22px !important;
-    font-size: 42px !important;
-  }
-}
-
-/* iPAD / TABLET TÁCTIL HORIZONTAL */
-@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
-
-  .themes-layout{
-    grid-template-columns: minmax(0, 1fr) 250px !important;
-    gap: 12px !important;
-    align-items: start !important;
-  }
-
-  .themes-left{
-    max-width: 860px !important;
-  }
-
-  .themes-logo img{
-    width: 760px !important;
-    max-width: 100% !important;
-  }
-
-  .themes-actions{
-    gap: 8px !important;
-    flex-wrap: nowrap !important;
-    margin-top: 0 !important;
-  }
-
-  #btnChangeLanguage,
-  #btnResumeGame,
-  #btnDeleteSave,
-  #btnAddTheme{
-    width: 178px !important;
-    height: 58px !important;
-  }
-
-  .themes-panel-image{
-    max-width: 860px !important;
-  }
-
-  .themes-content{
-    top: 118px !important;
-    left: 46px !important;
-    right: 46px !important;
-    bottom: 32px !important;
-  }
-
-  .themes-character-slot{
-    min-height: 460px !important;
-    padding-top: 4px !important;
-    align-items: flex-end !important;
-  }
-
-  #monsieurBete{
-    max-width: 460px !important;
-    transform: translate(-45px, -20px) !important;
-  }
-
-  .tutorial-bubble{
-    top: 165px !important;
-    right: 210px !important;
-    width: 440px !important;
-    height: 293px !important;
-  }
-
-  .tutorial-bubble__text{
-    top: 64px !important;
-    left: 55px !important;
-    right: 78px !important;
-    bottom: 78px !important;
-    font-size: 24px !important;
-    line-height: 1.2 !important;
-  }
-
-  .tutorial-bubble__arrow{
-    right: 218px !important;
-    bottom: 22px !important;
-    font-size: 42px !important;
-  }
-
-  /* Configuración en iPad: mantener tu ajuste fino */
-  .config-layout{
-    margin-top: 48px !important;
-  }
-
-  .btn-back-floating{
-    top: 40px !important;
-    left: 170px !important;
-  }
-
-  /* Pantallas de fase: botón más alto en Safari/iPad */
-  .phase-content button,
-  #btnContinuePhase{
-    bottom: 86px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-  }
-
-  .phase-content button:hover,
-  #btnContinuePhase:hover{
-    transform: translateX(-50%) scale(1.03) !important;
-  }
-}
-
-/* Normalización del botón salir */
-#screenGame > #btnExitGame{
-  position: fixed !important;
-  top: 18px !important;
-  right: 18px !important;
-  left: auto !important;
-  bottom: auto !important;
-  transform: none !important;
-  width: 120px !important;
-  height: 48px !important;
-  z-index: 99999 !important;
 }
