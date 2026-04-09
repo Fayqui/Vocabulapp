@@ -605,8 +605,11 @@ let bonusResolver = null;
 function askBonus(playerLabel) {
   return new Promise((resolve) => {
     bonusResolver = resolve;
+
+    const spokenLanguage = state.language === "fr" ? "francés" : "inglés";
+
     els.bonusTitle.textContent = "Bonus";
-    els.bonusText.textContent = `${playerLabel}: ¿Dijiste la palabra en francés antes de girar?`;
+    els.bonusText.textContent = `${playerLabel}: ¿Dijiste la palabra en ${spokenLanguage} antes de girar?`;
     els.bonusDialog.showModal();
   });
 }
