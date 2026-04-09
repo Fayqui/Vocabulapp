@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vocabulapp</title>
+  <link rel="stylesheet" href="style.css?v=mbete3">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0f2242" />
+</head>
+
+<body class="bg-biblioteca">
+
+  <main class="container">
+    <!-- PANTALLA: INICIO / IDIOMA -->
+  <section id="screenStart" class="start-fullscreen">
+  <div class="start-screen">
+
+    <section class="welcome-panel">
+
+      <img
+        src="assets/logo-inicio.png"
+        alt="Vocabulapp"
+        class="app-logo"
+      />
+
+      <p class="school-name">C.E.I.P. J.M. Illera de la Mora</p>
+
+      <h1 class="language-title">Elige idioma</h1>
+
+      <div class="language-buttons">
+        <button class="lang-btn" id="btnLangFR">
+          <img src="assets/btn-fr.png" alt="Français">
+        </button>
+
+        <button class="lang-btn" id="btnLangEN">
+          <img src="assets/btn-en.png" alt="English">
+        </button>
+      </div>
+
+    </section>
+
+  </div>
+</section>
+
+    <!-- PANTALLA: TEMAS -->
+ <section id="screenThemes" class="screen-transition" style="display:none;">
+  <div class="themes-layout">
+    <div class="themes-left">
+      <div class="themes-header">
+        <div class="themes-logo">
+          <img src="assets/banderola+logo.png" alt="Vocabulapp">
+        </div>
+
+        <div class="themes-actions">
+          <button id="btnChangeLanguage" class="themed-image-btn" type="button" aria-label="Cambiar idioma"><span>🌐 Idioma</span></button>
+          <button id="btnResumeGame" class="themed-image-btn" type="button" style="display:none;" aria-label="Continuar partida"><span>▶ Continuar partida</span></button>
+          <button id="btnDeleteSave" class="themed-image-btn" type="button" style="display:none;" aria-label="Borrar guardado"><span>🗑 Borrar guardado</span></button>
+          <button id="btnAddTheme" class="themed-image-btn" type="button" aria-label="Añadir tema"><span>➕ Añadir tema</span></button>
+        </div>
+      </div>
+
+      <div class="themes-panel-image">
+        <img id="panelImage" src="assets/panel-temas-fr.png" alt="Panel de temas">
+
+        <div class="themes-content">
+          <div id="emptyState" class="empty-state">
+            <div class="empty-icon">📚</div>
+            <h2>No tienes temas todavía</h2>
+            <p>Pulsa “Añadir tema” para crear el primero.</p>
+          </div>
+
+          <ul id="themeList" class="list" aria-label="Lista de temas"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="themes-character-slot" aria-hidden="true">
+       <img id="monsieurBete" src="assets/monsieur-bete.png" alt="Monsieur Bête">
+
+    <div class="tutorial-bubble" id="tutorialBubble">
+      <div class="tutorial-bubble__text" id="tutorialBubbleText">
+        Añade un tema para empezar.
+      </div>
+      <div class="tutorial-bubble__arrow" id="tutorialBubbleNext">➜</div>
+    </div>  
+
+  </div>
+</section>
+
+<!-- PANTALLA: CONFIGURACIÓN PARTIDA -->
+   <section id="screenConfig" class="screen-transition" style="display:none;">
+
+<button id="btnBack" class="btn-back-floating" type="button">
+  <img src="assets/btn-back-floating.png" alt="Volver">
+</button>
+
+<div class="config-layout">
+  <img src="assets/panel-configuracion.png" class="config-panel-bg" alt="Configuración">
+
+  <div class="config-content">
+
+    <div class="config-head">
+      <h2 id="configThemeTitle">Configurar partida</h2>
+      <p id="configThemeMeta"></p>
+    </div>
+
+    <label class="config-row">
+      <span>Modo de juego</span>
+      <select id="gameMode">
+        <option value="solo">Solo</option>
+        <option value="bataille">Mode Bataille (2 jugadores)</option>
+        <option value="equipe">Mode Équipe (cooperativo)</option>
+      </select>
+    </label>
+
+    <div id="playerNames" class="config-player-grid">
+      <label class="config-row">
+        <span>Introduce el nombre del Jugador 1</span>
+        <input id="p1" type="text" value="Jugador 1" />
+      </label>
+
+      <label class="config-row">
+        <span>Introduce el nombre del Jugador 2</span>
+        <input id="p2" type="text" value="Jugador 2" />
+      </label>
+    </div>
+
+    <label class="config-row">
+      <span>Dificultad</span>
+      <select id="difficulty">
+        <option value="normal">Modo Normal</option>
+        <option value="reinforce">Modo Refuerzo</option>
+        <option value="write">Modo Difícil – Escritura</option>
+      </select>
+    </label>
+
+    <label class="config-row" id="accentField" style="display:none;">
+      <span>Acentos en modo escritura</span>
+      <select id="accentMode">
+        <option value="ignore" selected>Ignorar acentos (recomendado)</option>
+        <option value="strict">Exigir acentos</option>
+      </select>
+    </label>
+
+    <div class="config-row">
+      <span class="config-label">Fases</span>
+      <div class="phase-options">
+        <label><input type="checkbox" class="phase" value="1" checked /> Fase 1</label>
+        <label><input type="checkbox" class="phase" value="2" checked /> Fase 2</label>
+        <label><input type="checkbox" class="phase" value="3" checked /> Fase 3</label>
+        <label><input type="checkbox" class="phase" value="final" /> Fase Final</label>
+      </div>
+      <p class="config-note">Se jugarán solo las fases marcadas, en orden.</p>
+    </div>
+
+    <div class="config-actions">
+      <button id="btnStart" class="config-btn start-btn" type="button">Jugar</button>
+    </div>
+  </div>
+</div></section>
+
+    <!-- PANTALLA: JUEGO -->
+<section id="screenGame" class="card screen-transition gameplay-clean" style="display:none;">
+
+  <div class="gameplay-stage">
+
+    <img src="assets/gameplay-book.png" alt="" class="gameplay-book">
+
+    <div class="gameplay-hud">
+
+      <div class="row row-between">
+        <h2 class="title" id="gameTitle">Jugando…</h2>
+      </div>
+
+      <p class="muted small" id="gameMeta"></p>
+
+      <div id="progressWrap">
+        <div id="progressLabels"></div>
+        <div id="progressBar">
+          <div id="progressTrack">
+            <div id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="scoreBoard" class="score-board"></div>
+
+      <div class="game-board">
+        <div>
+          <h3 class="board-title">Español</h3>
+          <div id="boardES" class="board"></div>
+        </div>
+
+        <div>
+          <h3 class="board-title">Français</h3>
+          <div id="boardFR" class="board"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button id="btnExitGame" class="btn" type="button">Salir</button>
+</section>
+  </main>
+
+  <!-- Modal: crear tema -->
+  <dialog id="themeDialog" class="dialog">
+    <form id="themeForm" method="dialog" class="dialog-inner">
+      <h3 class="dialog-title">Nuevo tema</h3>
+
+      <label class="field">
+        <span>Nombre del tema</span>
+        <input id="themeName" name="themeName" type="text" placeholder="Ej. Les fruits" required />
+      </label>
+
+      <label class="field">
+        <span>Vocabulario (FR - ES) — una línea por pareja</span>
+        <textarea id="themePairs" name="themePairs" rows="8" placeholder="la pomme - manzana&#10;le lait - leche" required></textarea>
+      </label>
+
+      <div class="row row-end gap">
+        <button id="btnCancel" class="btn" type="button">Cancelar</button>
+        <button class="btn btn-primary" type="submit">Crear</button>
+      </div>
+
+      <p class="muted small">Nota: por ahora guardaremos los temas en este dispositivo (local).</p>
+    </form>
+  </dialog>
+
+  <!-- Dialog BONUS -->
+  <dialog id="bonusDialog" class="dialog">
+    <div class="dialog-inner">
+      <h3 class="dialog-title" id="bonusTitle">Bonus</h3>
+      <p class="muted" id="bonusText">¿Punto extra?</p>
+
+      <div class="row row-end gap">
+        <button id="btnBonusNo" class="btn" type="button">No</button>
+        <button id="btnBonusYes" class="btn btn-primary" type="button">Sí (+1)</button>
+      </div>
+
+      <p class="muted small" style="margin-top:10px;">
+        Solo aparece tras acertar una pareja.
+      </p>
+    </div>
+  </dialog>
+
+  <!-- Dialog ESCRITURA -->
+  <dialog id="writeDialog" class="dialog">
+    <div class="dialog-inner">
+      <h3 class="dialog-title">Défi d'écriture ✍️</h3>
+
+      <p class="muted">Escribe en francés la palabra correspondiente:</p>
+
+      <input
+        id="writeInput"
+        type="text"
+        class="input"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+      />
+
+      <div class="row row-end gap" style="margin-top:12px;">
+        <button id="btnWriteOk" class="btn btn-primary" type="button">Comprobar</button>
+      </div>
+
+      <p id="writeFeedback" class="muted small" style="margin-top:8px;"></p>
+    </div>
+  </dialog>
+
+<dialog id="appDialog" class="dialog app-dialog">
+  <div class="dialog-inner app-dialog-inner">
+    <h3 id="appDialogTitle" class="dialog-title app-dialog-title">Mensaje</h3>
+    <p id="appDialogText" class="app-dialog-text"></p>
+
+    <div id="appDialogActions" class="row row-end gap app-dialog-actions">
+      <button id="appDialogCancel" class="btn app-btn-secondary" type="button">Cancelar</button>
+      <button id="appDialogOk" class="btn app-btn-primary" type="button">Aceptar</button>
+    </div>
+  </div>
+</dialog>
+
+  <!-- OVERLAY DE FASE -->
+  <div id="phaseOverlay" class="phase-overlay" style="display:none;">
+    <div class="phase-content">
+      <img id="phaseImage" src="" alt="Fase" />
+      <button id="btnContinuePhase" class="btn btn-primary" type="button">Continuar</button>
+    </div>
+  </div>
+
+  <button id="btnAudioToggle" class="audio-toggle" type="button" aria-label="Activar o desactivar música">
+    🔊
+  </button>
+
+  <script src="app.js?v=mbete3"></script>
+
+</script>
+</body>
+</html>
