@@ -4453,7 +4453,7 @@ body{
 /* =========================================
    iPAD - bajar panel de configuración
    ========================================= */
-@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape){
+@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (orientation: landscape) and (hover: none) and (pointer: coarse){
   .config-layout{
     margin-top: 48px !important;
   }
