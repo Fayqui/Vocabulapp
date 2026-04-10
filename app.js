@@ -606,7 +606,7 @@ function askBonus(playerLabel) {
   return new Promise((resolve) => {
     bonusResolver = resolve;
 
-    const spokenLanguage = state.language === "fr" ? "francés" : "inglés";
+    const spokenLanguage = state.currentLanguage === "fr" ? "francés" : "inglés";
 
     els.bonusTitle.textContent = "Bonus";
     els.bonusText.textContent = `${playerLabel}: ¿Dijiste la palabra en ${spokenLanguage} antes de girar?`;
