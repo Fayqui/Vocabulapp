@@ -385,18 +385,44 @@ select{
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 20px;
-  padding: 12px 30px;
-  background: white;
-  color: black;
-  border: 4px solid black;
-  border-radius: 12px;
+  width: 200px;
+  height: 34px;
+  padding: 0;
+  background: transparent;
+  background-image: url("assets/btn-cont-screen.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: transparent;
+  font-size: 0;
   cursor: pointer;
+  overflow: hidden;
+}
+
+.phase-content button,
+.phase-content button:hover,
+.phase-content button:focus,
+.phase-content button:active{
+  background-color: transparent !important;
+  background-image: url("assets/btn-cont-screen.png") !important;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  outline: none;
+  box-shadow: none;
 }
 
 .phase-content button:hover{
-  transform: translateX(-50%) scale(1.05);
+  transform: translateX(-50%) translateY(-1px);
+  filter: brightness(1.05);
+}
 
+ .phase-content button{
+  -webkit-tap-highlight-color: transparent;
+}
 
 }/* ===== Color traducción FR ===== */
 #boardFR .card-front{
