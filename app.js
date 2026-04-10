@@ -128,6 +128,23 @@ const els = {
   appDialogActions: document.getElementById("appDialogActions"),
 };
 
+function preloadImages() {
+  const images = [
+    "assets/gameplay-screen.png",
+    "assets/gameplay-book.png",
+    "assets/panel-temas-fr.png",
+    "assets/panel-temas-en.png",
+    "assets/monsieur-bete.png",
+    "assets/card-face.png",
+    "assets/banderola+logo.png"
+  ];
+
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
 // =========================
 // AUDIO
 // =========================
@@ -1650,6 +1667,7 @@ function bindTutorialBubble() {
 (function init() {
   updateAccentField();
   bindTutorialBubble();
+  preloadImages();
 
   document.addEventListener("click", () => {
     unlockAudio();
