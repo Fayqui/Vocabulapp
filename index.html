@@ -121,7 +121,7 @@
         <input id="p1" type="text" value="Jugador 1" />
       </label>
 
-      <label class="config-row">
+      <label class="config-row" id="p2Field">
         <span>Introduce el nombre del Jugador 2</span>
         <input id="p2" type="text" value="Jugador 2" />
       </label>
@@ -292,8 +292,9 @@
     </div>
   </div>
 
-  <button id="btnAudioToggle" class="audio-toggle" type="button" aria-label="Activar o desactivar música">
-    🔊
+<button id="btnAudioToggle" class="audio-toggle" type="button" aria-label="Audio">
+  <img id="audioIcon" src="assets/icons/icon-audio-on.png" alt="Audio activado">
+</button>
   </button>
 
   <script src="app.js?v=mbete3"></script>

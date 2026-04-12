@@ -94,6 +94,7 @@ const els = {
   accentMode: document.getElementById("accentMode"),
   p1: document.getElementById("p1"),
   p2: document.getElementById("p2"),
+  p2Field: document.getElementById("p2Field"),
   btnStart: document.getElementById("btnStart"),
  
   btnExitGame: document.getElementById("btnExitGame"),
@@ -119,6 +120,7 @@ const els = {
   btnContinuePhase: document.getElementById("btnContinuePhase"),
 
   btnAudioToggle: document.getElementById("btnAudioToggle"),
+  audioIcon: document.getElementById("audioIcon"),
 
   appDialog: document.getElementById("appDialog"),
   appDialogTitle: document.getElementById("appDialogTitle"),
@@ -168,12 +170,22 @@ gameplayMusic.muted = !audioEnabled;
 
 function updateAudioButtonUI() {
   if (!els.btnAudioToggle) return;
-  els.btnAudioToggle.textContent = audioEnabled ? "🔊" : "🔇";
+
+  const icon = els.audioIcon || document.getElementById("audioIcon");
+  if (!icon) return;
+
+  icon.src = audioEnabled
+    ? "assets/icons/icon-audio-on.png"
+    : "assets/icons/icon-audio-off.png";
+
+  icon.alt = audioEnabled ? "Audio activado" : "Audio desactivado";
 
   els.btnAudioToggle.classList.toggle("is-muted", !audioEnabled);
-
-// opcional: cambia el title para comprobar si responde
   els.btnAudioToggle.title = audioEnabled ? "Apagar audio" : "Encender audio";
+  els.btnAudioToggle.setAttribute(
+    "aria-label",
+    audioEnabled ? "Apagar audio" : "Encender audio"
+  );
 }
 
 function unlockAudio() {
@@ -503,8 +515,10 @@ function showAppConfirm(title, text, okText = "Aceptar", cancelText = "Cancelar"
  
 function updatePlayerFields() {
   const isSolo = els.gameMode.value === "solo";
-  const p2Field = els.p2?.closest("label.field");
-  if (p2Field) p2Field.style.display = isSolo ? "none" : "grid";
+
+  if (els.p2Field) {
+    els.p2Field.style.display = isSolo ? "none" : "grid";
+  }
 }
  
 function updateAccentField() {
@@ -678,7 +692,7 @@ function askWrite(correctFR) {
           resolve(true);
         }, 1600);
       } else {
-        els.writeFeedback.textContent = `❌ Correcto: ${correctFR}`;
+        els.writeFeedback.textContent = `❌ Incorrecto. La respuesta correcta es: ${correctFR}`;
         setTimeout(() => {
           els.writeDialog.close();
           cleanup();
@@ -1738,3 +1752,5 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('Error Service Worker', err));
   });
 }
+
+

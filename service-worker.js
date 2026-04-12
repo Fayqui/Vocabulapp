@@ -1,11 +1,29 @@
-const CACHE_NAME = "vocabulapp-dev-v5";
+const CACHE_NAME = "vocabulapp-dev-v7";
 
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./style.css",
   "./app.js",
-  "./manifest.json"
+  "./manifest.json",
+
+  "./assets/banderola+logo.png",
+  "./assets/panel-temas-fr.png",
+  "./assets/panel-temas-en.png",
+  "./assets/monsieur-bete.png",
+  "./assets/gameplay-book.png",
+  "./assets/gameplay-screen.png",
+  "./assets/card-face.png",
+
+  "./assets/btn-idioma.png",
+  "./assets/btn-anadir.png",
+  "./assets/btn-continuar.png",
+  "./assets/btn-borrar.png",
+  "./assets/btn-salir.png",
+  "./assets/btn-back-floating.png",
+
+  "./assets/logo-inicio.png",
+  "./assets/fondo-inicio.png"
 ];
 
 self.addEventListener("install", (event) => {
