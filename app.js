@@ -30,7 +30,8 @@ function getPhaseImageFile(baseName) {
  
 const state = {
  selectedThemeId: null,
-currentLanguage: localStorage.getItem(LANGUAGE_KEY) || null,
+ currentLanguage: localStorage.getItem(LANGUAGE_KEY) || null,
+ editingThemeId: null,
 };
  
 const gameState = {
@@ -326,6 +327,16 @@ function showScreen(name) {
   syncMusicToScreen(name);
 }
  
+function markThemeAsPlayed(themeId) {
+  const themes = loadThemes();
+  const index = themes.findIndex(t => t.id === themeId);
+
+  if (index !== -1) {
+    themes[index].status = "Jugado";
+    saveThemes(themes);
+  }
+}
+
 function loadThemes() {
   try {
     const raw = localStorage.getItem(getThemesStorageKey());
@@ -341,6 +352,120 @@ error)
  
 function saveThemes(themes) {
   localStorage.setItem(getThemesStorageKey(), JSON.stringify(themes));
+}
+
+function decodeSharedTheme(encoded) {
+  try {
+    const json = LZString.decompressFromEncodedURIComponent(encoded);
+    const parsed = JSON.parse(json);
+
+    if (
+      !parsed ||
+      typeof parsed.name !== "string" ||
+      !Array.isArray(parsed.pairs)
+    ) {
+      return null;
+    }
+
+    const validPairs = parsed.pairs.filter(
+      (pair) =>
+        pair &&
+        typeof pair.fr === "string" &&
+        typeof pair.es === "string" &&
+        pair.fr.trim() &&
+        pair.es.trim()
+    );
+
+    if (validPairs.length === 0) return null;
+
+    return {
+      lang: parsed.lang === "en" ? "en" : "fr",
+      name: parsed.name.trim(),
+      pairs: validPairs,
+    };
+  } catch (error) {
+    console.error("Error al decodificar tema compartido:", error);
+    return null;
+  }
+}
+
+function getImportedThemeName(baseName, themes) {
+  const existingNames = new Set(themes.map((t) => t.name));
+  if (!existingNames.has(baseName)) return baseName;
+
+  let counter = 2;
+  let candidate = `${baseName} (${counter})`;
+
+  while (existingNames.has(candidate)) {
+    counter += 1;
+    candidate = `${baseName} (${counter})`;
+  }
+
+  return candidate;
+}
+
+async function importSharedThemeFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const encoded = params.get("theme");
+  if (!encoded) return;
+
+  const sharedTheme = decodeSharedTheme(encoded);
+  if (!sharedTheme) {
+    await showAppAlert(
+      "Enlace no válido",
+      "El tema compartido no se ha podido leer."
+    );
+    return;
+  }
+
+  const accepted = await showAppConfirm(
+    "Importar tema",
+    `¿Quieres importar el tema "${sharedTheme.name}"?`,
+    "Importar",
+    "Cancelar"
+  );
+
+  if (!accepted) return;
+
+  const previousLanguage = state.currentLanguage || "fr";
+  state.currentLanguage = sharedTheme.lang;
+
+  const themes = loadThemes();
+  const finalName = getImportedThemeName(sharedTheme.name, themes);
+
+  themes.push(
+    createTheme({
+      name: finalName,
+      pairs: sharedTheme.pairs,
+    })
+  );
+
+  saveThemes(themes);
+
+  state.currentLanguage = sharedTheme.lang;
+  localStorage.setItem(LANGUAGE_KEY, sharedTheme.lang);
+
+  renderThemes(themes);
+  updateResumeButtons();
+  updateTutorialBubbleVisibility();
+
+  const cleanUrl = new URL(window.location.href);
+  cleanUrl.searchParams.delete("theme");
+  window.history.replaceState({}, "", cleanUrl.toString());
+
+  await showAppAlert(
+    "Tema importado",
+    `El tema "${finalName}" ya está disponible en Vocabulapp.`
+  );
+
+state.currentLanguage = sharedTheme.lang;
+localStorage.setItem(LANGUAGE_KEY, sharedTheme.lang);
+
+renderThemes(loadThemes());
+updateResumeButtons();
+updateTutorialBubbleVisibility();
+updateThemeDialogTexts();
+showScreen("themes");
 }
 
 async function deleteThemeById(themeId, themeName) {
@@ -391,6 +516,46 @@ function createTheme({ name, pairs }) {
   };
 }
  
+function serializeSharedTheme(theme) {
+  return {
+    lang: state.currentLanguage || "fr",
+    name: theme.name,
+    pairs: theme.pairs,
+  };
+}
+
+function encodeSharedTheme(theme) {
+  const json = JSON.stringify(serializeSharedTheme(theme));
+  return LZString.compressToEncodedURIComponent(json);
+}
+
+function buildSharedThemeUrl(theme) {
+  const encoded = encodeSharedTheme(theme);
+  const url = new URL(window.location.href);
+  url.searchParams.set("theme", encoded);
+  return url.toString();
+}
+
+async function shareTheme(theme) {
+  try {
+    const shareUrl = buildSharedThemeUrl(theme);
+
+    await navigator.clipboard.writeText(shareUrl);
+
+    await showAppAlert(
+      "Enlace copiado",
+      `Ya puedes pegarlo en Classroom para compartir el tema "${theme.name}".`
+    );
+  } catch (error) {
+    console.error("Error al compartir tema:", error);
+
+    await showAppAlert(
+      "No se pudo copiar",
+      "No se ha podido copiar el enlace automáticamente."
+    );
+  }
+}
+
 function renderThemes(themes) {
   els.themeList.innerHTML = "";
 
@@ -425,6 +590,31 @@ function renderThemes(themes) {
     status.className = "theme-meta theme-status";
     status.textContent = t.status || "Nuevo";
 
+    const editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.className = "theme-delete theme-edit";
+    editBtn.setAttribute("aria-label", `Editar tema ${t.name}`);
+    editBtn.title = `Editar tema ${t.name}`;
+    editBtn.textContent = "✏";
+    
+    
+    editBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openEditDialog(t);
+    });
+
+const shareBtn = document.createElement("button");
+shareBtn.type = "button";
+shareBtn.className = "theme-share";
+shareBtn.setAttribute("aria-label", `Compartir tema ${t.name}`);
+shareBtn.title = `Compartir tema ${t.name}`;
+shareBtn.textContent = "🔗";
+
+shareBtn.addEventListener("click", async (event) => {
+  event.stopPropagation();
+  await shareTheme(t);
+});
+
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
     deleteBtn.className = "theme-delete";
@@ -438,6 +628,8 @@ function renderThemes(themes) {
     });
 
     right.appendChild(status);
+    right.appendChild(shareBtn);
+    right.appendChild(editBtn);
     right.appendChild(deleteBtn);
 
     li.appendChild(left);
@@ -445,6 +637,7 @@ function renderThemes(themes) {
 
     li.addEventListener("click", () => {
       state.selectedThemeId = t.id;
+      markThemeAsPlayed(state.selectedThemeId);
       openConfigForTheme(t);
     });
 
@@ -456,12 +649,42 @@ function renderThemes(themes) {
 }
  
 function openDialog() {
+  state.editingThemeId = null;
+
   els.form.reset();
+
+  const dialogTitle = els.dialog.querySelector(".dialog-title");
+  if (dialogTitle) {
+    dialogTitle.textContent = "Nuevo tema";
+  }
+
   els.dialog.showModal();
   els.themeName.focus();
 }
  
+function openEditDialog(theme) {
+  if (!theme) return;
+
+  state.editingThemeId = theme.id;
+
+  const dialogTitle = els.dialog.querySelector(".dialog-title");
+  if (dialogTitle) {
+    dialogTitle.textContent = "Editar tema";
+  }
+
+  els.themeName.value = theme.name || "";
+
+  els.themePairs.value = (theme.pairs || [])
+    .map((pair) => `${pair.fr} - ${pair.es}`)
+    .join("\n");
+
+  els.dialog.showModal();
+  els.themeName.focus();
+}
+
+
 function closeDialog() {
+  state.editingThemeId = null;
   els.dialog.close();
 }
 
@@ -1491,8 +1714,11 @@ if (els.btnAddTheme) {
     openDialog();
   });
 }
-els.btnCancel.addEventListener("click", closeDialog);
- 
+els.btnCancel.addEventListener("click", () => {
+   state.editingThemeId = null;
+   closeDialog();
+   });
+
 if (els.btnResumeGame) {
   els.btnResumeGame.addEventListener("click", () => {
     playUISound();
@@ -1526,31 +1752,31 @@ els.form.addEventListener("submit", async (e) => {
   playUISound();
 
   const name = els.themeName.value.trim();
-  const pairsText = els.themePairs.value.trim();
-  const pairs = parsePairs(pairsText);
+const pairs = parsePairs(els.themePairs.value);
 
-  if (!name) {
-    await showAppAlert(
-      "Falta información",
-      "Escribe un nombre para el tema."
-    );
-    return;
+const themes = loadThemes();
+
+if (state.editingThemeId) {
+
+  const index = themes.findIndex(t => t.id === state.editingThemeId);
+
+  if (index !== -1) {
+    themes[index].name = name;
+    themes[index].pairs = pairs;
   }
 
-  if (pairs.length === 0) {
-    await showAppAlert(
-      "Tema incompleto",
-      "Añade al menos una pareja: francés - español."
-    );
-    return;
-  }
+} else {
 
-  const themes = loadThemes();
   themes.push(createTheme({ name, pairs }));
-  saveThemes(themes);
 
-  closeDialog();
-  renderThemes(themes);
+}
+
+saveThemes(themes);
+
+state.editingThemeId = null;
+
+renderThemes(themes);
+closeDialog();
 }); 
 
 els.btnBack.addEventListener("click", () => {
@@ -1730,6 +1956,10 @@ updateAudioButtonUI();
 
   // SIEMPRE arrancar en pantalla inicial
   showScreen("start");
+
+importSharedThemeFromUrl().catch((error) => {
+  console.error("Error al importar tema compartido:", error);
+});
 })();
 
 /* ===== Guardado de seguridad al cerrar / recargar ===== */
