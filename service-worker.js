@@ -1,4 +1,4 @@
-const CACHE_NAME = "vocabulapp-dev-v10";
+const CACHE_NAME = "vocabulapp-dev-v11";
 
 const CORE_ASSETS = [
   "/",
