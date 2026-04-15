@@ -109,9 +109,9 @@
     <label class="config-row">
       <span>Modo de juego</span>
       <select id="gameMode">
-        <option value="solo">Solo</option>
-        <option value="bataille">Mode Bataille (2 jugadores)</option>
-        <option value="equipe">Mode Équipe (cooperativo)</option>
+        <option value="solo" id="modeSolo">Solo</option>
+        <option value="bataille" id="modeBataille">Mode Bataille (2 jugadores)</option>
+        <option value="equipe" id="modeEquipe">Mode Équipe (cooperativo)</option>
       </select>
     </label>
 
@@ -189,12 +189,12 @@
 
       <div class="game-board">
         <div>
-          <h3 class="board-title">Español</h3>
+          <h3 class="board-title" id="boardTitleES">Español</h3>
           <div id="boardES" class="board"></div>
         </div>
 
         <div>
-          <h3 class="board-title">Français</h3>
+          <h3 class="board-title" id="boardTitleOther">Français</h3>
           <div id="boardFR" class="board"></div>
         </div>
       </div>
@@ -250,9 +250,11 @@
   <!-- Dialog ESCRITURA -->
   <dialog id="writeDialog" class="dialog">
     <div class="dialog-inner">
-      <h3 class="dialog-title">Défi d'écriture ✍️</h3>
+      <h3 class="dialog-title" id="writeDialogTitle">Défi d'écriture ✍️</h3>
 
-      <p class="muted">Escribe en francés la palabra correspondiente:</p>
+ <p class="muted" id="writeDialogText">
+  Escribe en francés la palabra correspondiente:
+</p>
 
       <input
         id="writeInput"

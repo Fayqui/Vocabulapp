@@ -90,6 +90,9 @@ const els = {
   configThemeTitle: document.getElementById("configThemeTitle"),
   configThemeMeta: document.getElementById("configThemeMeta"),
   gameMode: document.getElementById("gameMode"),
+  modeSolo: document.getElementById("modeSolo"),
+  modeBataille: document.getElementById("modeBataille"),
+  modeEquipe: document.getElementById("modeEquipe"),
   difficulty: document.getElementById("difficulty"),
   accentField: document.getElementById("accentField"),
   accentMode: document.getElementById("accentMode"),
@@ -103,6 +106,8 @@ const els = {
   gameMeta: document.getElementById("gameMeta"),
   boardES: document.getElementById("boardES"),
   boardFR: document.getElementById("boardFR"),
+  boardTitleES: document.getElementById("boardTitleES"),
+  boardTitleOther: document.getElementById("boardTitleOther"),
  
   bonusDialog: document.getElementById("bonusDialog"),
   bonusTitle: document.getElementById("bonusTitle"),
@@ -111,6 +116,8 @@ const els = {
   btnBonusNo: document.getElementById("btnBonusNo"),
  
   writeDialog: document.getElementById("writeDialog"),
+  writeDialogTitle: document.getElementById("writeDialogTitle"),
+  writeDialogText: document.getElementById("writeDialogText"),
   writeInput: document.getElementById("writeInput"),
   btnWriteOk: document.getElementById("btnWriteOk"),
   writeFeedback: document.getElementById("writeFeedback"),
@@ -822,7 +829,9 @@ async function selectLanguage(lang) {
   renderThemes(loadThemes());
   updateResumeButtons();
   updateTutorialBubbleVisibility();
+  updateLanguageDependentTexts();
   showScreen("themes");
+  
 }
 
 function getIntroImageByLanguage() {
@@ -858,19 +867,19 @@ function updateScoreBoard() {
   const { p1Name, p2Name } = getPlayerNames();
  
   if (gameState.mode === "solo") {
-    sb.appendChild(createScore(`Puntos: ${gameState.scores[0]}`));
-    return;
-  }
+  sb.appendChild(createScore(`${p1Name}: ${gameState.scores[0]} puntos`));
+  return;
+}
  
   if (gameState.mode === "equipe") {
     const currentName = gameState.currentPlayer === 0 ? p1Name : p2Name;
     sb.appendChild(createScore(`Turno: ${currentName}`, true));
-    sb.appendChild(createScore(`Equipo: ${gameState.scores[0]}`));
+    sb.appendChild(createScore(`Equipo: ${gameState.scores[0]} puntos`));
     return;
   }
  
-  const p1 = createScore(`${p1Name}: ${gameState.scores[0]}`, gameState.currentPlayer === 0);
-  const p2 = createScore(`${p2Name}: ${gameState.scores[1]}`, gameState.currentPlayer === 1);
+  const p1 = createScore(`${p1Name}: ${gameState.scores[0]} puntos`, gameState.currentPlayer === 0);
+  const p2 = createScore(`${p2Name}: ${gameState.scores[1]} puntos`, gameState.currentPlayer === 1);
  
   sb.appendChild(p1);
   sb.appendChild(p2);
@@ -1662,6 +1671,51 @@ function updateThemeDialogTexts() {
   });
 }
  
+function updateLanguageDependentTexts() {
+  const isFR = state.currentLanguage === "fr";
+
+  if (els.boardTitleES) {
+    els.boardTitleES.textContent = "Español";
+  }
+
+  if (els.boardTitleOther) {
+    els.boardTitleOther.textContent = isFR ? "Français" : "English";
+  }
+
+  if (els.writeDialogTitle) {
+    els.writeDialogTitle.textContent = isFR
+      ? "Défi d'écriture ✍️"
+      : "Writing challenge ✍️";
+  }
+
+  if (els.writeDialogText) {
+    els.writeDialogText.textContent = isFR
+      ? "Escribe en francés la palabra correspondiente:"
+      : "Escribe en inglés la palabra correspondiente:";
+  }
+
+  if (els.btnWriteOk) {
+    els.btnWriteOk.textContent = isFR ? "Comprobar" : "Check";
+  }
+
+  if (els.modeSolo) {
+    els.modeSolo.textContent = "Solo";
+  }
+
+  if (els.modeBataille) {
+    els.modeBataille.textContent = isFR
+      ? "Mode Bataille (2 joueurs / 2 jugadores)"
+      : "Battle Mode (2 players / 2 jugadores)";
+  }
+
+  if (els.modeEquipe) {
+    els.modeEquipe.textContent = isFR
+      ? "Mode Équipe (coopérative / cooperativo)"
+      : "Team Mode (cooperative / cooperativo)";
+  }
+}
+
+
 async function resumeSavedGame() {
   const snapshot = loadSavedGame();
   if (!snapshot) return;
@@ -1956,6 +2010,7 @@ function bindTutorialBubble() {
   updateAccentField();
   bindTutorialBubble();
   preloadImages();
+  
 
   document.addEventListener("click", () => {
     unlockAudio();
@@ -2001,6 +2056,8 @@ updateAudioButtonUI();
     updateResumeButtons();
     updateTutorialBubbleVisibility();
   }
+
+  updateLanguageDependentTexts();
 
   // SIEMPRE arrancar en pantalla inicial
   showScreen("start");
