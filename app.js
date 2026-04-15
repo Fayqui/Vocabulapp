@@ -333,7 +333,36 @@ function markThemeAsPlayed(themeId) {
 
   if (index !== -1) {
     themes[index].status = "Jugado";
+    themes[index].previousStatus = "Jugado";
     saveThemes(themes);
+    renderThemes(loadThemes());   // ← refresca la lista
+  }
+}
+
+function restoreThemeStatusAfterClearingSave(themeId) {
+  const themes = loadThemes();
+  const index = themes.findIndex(t => t.id === themeId);
+
+  if (index !== -1 && themes[index].status === "En juego") {
+    themes[index].status = themes[index].previousStatus || "Nuevo";
+    themes[index].previousStatus = null;
+    saveThemes(themes);
+    renderThemes(loadThemes());
+  }
+}
+
+function markThemeAsInProgress(themeId) {
+  const themes = loadThemes();
+  const index = themes.findIndex(t => t.id === themeId);
+
+  if (index !== -1) {
+    const currentStatus = themes[index].status || "Nuevo";
+
+    if (currentStatus !== "En juego") {
+      themes[index].previousStatus = currentStatus;
+      themes[index].status = "En juego";
+      saveThemes(themes);
+    }
   }
 }
 
@@ -512,6 +541,7 @@ function createTheme({ name, pairs }) {
     name,
     pairs,
     status: "Nuevo",
+    previousStatus: null,
     createdAt: Date.now(),
   };
 }
@@ -637,7 +667,6 @@ shareBtn.addEventListener("click", async (event) => {
 
     li.addEventListener("click", () => {
       state.selectedThemeId = t.id;
-      markThemeAsPlayed(state.selectedThemeId);
       openConfigForTheme(t);
     });
 
@@ -1382,38 +1411,45 @@ async function handleRoundComplete() {
  
 async function finishGame() {
   gameState.isFinished = true;
- 
+
   const masteredCount = gameState.mastered.size;
   const pendingCount = gameState.toReinforce.size;
- 
+
   const { p1Name, p2Name } = getPlayerNames();
   const pointsText =
     gameState.mode === "bataille"
       ? `${p1Name} ${gameState.scores[0]} / ${p2Name} ${gameState.scores[1]}`
       : `${gameState.scores[0]}`;
- 
+
   const fillEl = document.getElementById("progressFill");
   const labelsEl = document.getElementById("progressLabels");
- 
+
   if (fillEl) fillEl.style.width = "100%";
+
   if (labelsEl) {
     const labels = labelsEl.querySelectorAll(".progress-label");
     labels.forEach((label) => label.classList.remove("active"));
-    if (labels.length > 0) labels[labels.length - 1].classList.add("active");
+    if (labels.length > 0) {
+      labels[labels.length - 1].classList.add("active");
+    }
   }
- 
+
+  if (state.selectedThemeId) {
+    markThemeAsPlayed(state.selectedThemeId);
+  }
+
   clearSavedGame();
- 
+
   const image = PHASE_IMAGE_MAP["victory"];
   if (image) {
     await showPhaseScreen(image);
   }
- 
-await showAppAlert(
-  "Partida terminada",
-  `Dominadas: ${masteredCount} - \nPendientes: ${pendingCount}\n - \nPuntos: ${pointsText}`,
-  "Aceptar"
-);
+
+  await showAppAlert(
+    "Partida terminada",
+    `Dominadas: ${masteredCount} - \nPendientes: ${pendingCount}\n - \nPuntos: ${pointsText}`,
+    "Aceptar"
+  );
 }
   
 function updateGameMeta() {
@@ -1487,6 +1523,10 @@ function getMatchedPairIdsFromBoard() {
 function saveGame() {
   if (gameState.isFinished) return;
 
+  if (state.selectedThemeId) {
+    markThemeAsInProgress(state.selectedThemeId);
+  }
+
   const orderES = Array.from(els.boardES.children).map((card) => ({
     pairId: card.dataset.pairId,
     text: card.dataset.text,
@@ -1505,12 +1545,12 @@ function saveGame() {
     v: 1,
     ts: Date.now(),
     selectedThemeId: state.selectedThemeId,
-  
+
     mode: gameState.mode,
     difficulty: gameState.difficulty,
     accentMode: gameState.accentMode,
     playFinal: gameState.playFinal,
-  
+
     round: gameState.round,
     currentPlayer: gameState.currentPlayer,
     scores: gameState.scores,
@@ -1520,12 +1560,12 @@ function saveGame() {
     phaseLabels: gameState.phaseLabels,
     currentPhaseIndex: gameState.currentPhaseIndex,
     phaseBlocksIds: gameState.phaseBlocks.map((block) => block.map((p) => p.id)),
-  
+
     mastered: Array.from(gameState.mastered),
     toReinforce: Array.from(gameState.toReinforce),
 
     matchedThisPhase: getMatchedPairIdsFromBoard(),
-  
+
     finalRoundIds:
       gameState.round === "final"
         ? Array.from(gameState.currentPhasePairIds)
@@ -1552,8 +1592,15 @@ function loadSavedGame() {
 }
  
 function clearSavedGame() {
+  const snapshot = loadSavedGame();
+
+  if (snapshot?.selectedThemeId) {
+    restoreThemeStatusAfterClearingSave(snapshot.selectedThemeId);
+  }
+
   localStorage.removeItem(getSaveStorageKey());
   updateResumeButtons();
+  renderThemes(loadThemes());
 }
  
 function updateResumeButtons() {
@@ -1795,6 +1842,7 @@ els.btnStart.addEventListener("click", () => {
 els.btnExitGame.addEventListener("click", () => {
   playUISound();
   saveGame();
+  renderThemes(loadThemes());
   showScreen("themes");
 });
  
@@ -1982,5 +2030,3 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('Error Service Worker', err));
   });
 }
-
-

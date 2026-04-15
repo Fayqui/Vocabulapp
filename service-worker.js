@@ -1,29 +1,64 @@
-const CACHE_NAME = "vocabulapp-dev-v9";
+const CACHE_NAME = "vocabulapp-dev-v10";
 
 const CORE_ASSETS = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./app.js",
-  "./manifest.json",
+  "/",
+  "/index.html",
+  "/style.css",
+  "/app.js",
+  "/manifest.json",
 
-  "./assets/banderola+logo.png",
-  "./assets/panel-temas-fr.png",
-  "./assets/panel-temas-en.png",
-  "./assets/monsieur-bete.png",
-  "./assets/gameplay-book.png",
-  "./assets/gameplay-screen.png",
-  "./assets/card-face.png",
+  "/assets/icon-192.png",
+  "/assets/icon-512.png",
 
-  "./assets/btn-idioma.png",
-  "./assets/btn-anadir.png",
-  "./assets/btn-continuar.png",
-  "./assets/btn-borrar.png",
-  "./assets/btn-salir.png",
-  "./assets/btn-back-floating.png",
+  "/assets/biblioteca.jpg",
+  "/assets/fondo-inicio.png",
+  "/assets/logo-inicio.png",
+  "/assets/banderola+logo.png",
 
-  "./assets/logo-inicio.png",
-  "./assets/fondo-inicio.png"
+  "/assets/btn-fr.png",
+  "/assets/btn-en.png",
+  "/assets/btn-idioma.png",
+  "/assets/btn-anadir.png",
+  "/assets/btn-continuar.png",
+  "/assets/btn-borrar.png",
+  "/assets/btn-salir.png",
+  "/assets/btn-back-floating.png",
+  "/assets/btn-cont-screen.png",
+
+  "/assets/panel-temas-fr.png",
+  "/assets/panel-temas-en.png",
+  "/assets/panel-configuracion.png",
+
+  "/assets/monsieur-bete.png",
+  "/assets/gameplay-book.png",
+  "/assets/gameplay-screen.png",
+  "/assets/card-face.png",
+
+  "/assets/intro-fr.png",
+  "/assets/intro-en.png",
+
+  "/assets/phase1-fr.png",
+  "/assets/phase1-en.png",
+  "/assets/phase2-fr.png",
+  "/assets/phase2-en.png",
+  "/assets/phase3-fr.png",
+  "/assets/phase3-en.png",
+  "/assets/phasefinal-fr.png",
+  "/assets/phasefinal-en.png",
+  "/assets/victory-fr.png",
+  "/assets/victory-en.png",
+
+  "/assets/cursor-vocabulapp.png",
+  "/assets/cursor-vocabulapp-hover.png",
+
+  "/assets/icons/icon-audio-on.png",
+  "/assets/icons/icon-audio-off.png",
+
+  "/assets/menu.mp3",
+  "/assets/gameplay.mp3",
+  "/assets/blip.wav",
+  "/assets/flip-card.wav",
+  "/assets/coin.wav"
 ];
 
 self.addEventListener("install", (event) => {
