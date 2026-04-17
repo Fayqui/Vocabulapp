@@ -71,6 +71,7 @@ const els = {
   btnDeleteSave: document.getElementById("btnDeleteSave"),
   themeList: document.getElementById("themeList"),
   emptyState: document.getElementById("emptyState"),
+  panelImage: document.getElementById("panelImage"),
  
   dialog: document.getElementById("themeDialog"),
   form: document.getElementById("themeForm"),
@@ -330,6 +331,10 @@ function showScreen(name) {
   setTimeout(() => {
     active.classList.add("screen-visible");
   }, 20);
+
+  if (els.btnBack) {
+    els.btnBack.style.display = name === "config" ? "block" : "none";
+  }
 
   syncMusicToScreen(name);
 }
@@ -703,9 +708,14 @@ function openEditDialog(theme) {
 
   state.editingThemeId = theme.id;
 
+  updateThemeDialogTexts();
+
   const dialogTitle = els.dialog.querySelector(".dialog-title");
   if (dialogTitle) {
-    dialogTitle.textContent = "Editar tema";
+    dialogTitle.textContent =
+      state.currentLanguage === "fr"
+        ? "Editar tema / Modifier le thème"
+        : "Editar tema / Edit theme";
   }
 
   els.themeName.value = theme.name || "";
@@ -717,7 +727,6 @@ function openEditDialog(theme) {
   els.dialog.showModal();
   els.themeName.focus();
 }
-
 
 function closeDialog() {
   state.editingThemeId = null;
@@ -826,12 +835,13 @@ async function selectLanguage(lang) {
 
   await showLanguageIntroAndGoThemes();
 
+  updateThemesPanelImage();
   renderThemes(loadThemes());
   updateResumeButtons();
   updateTutorialBubbleVisibility();
+  updateThemeDialogTexts();
   updateLanguageDependentTexts();
   showScreen("themes");
-  
 }
 
 function getIntroImageByLanguage() {
@@ -1715,6 +1725,15 @@ function updateLanguageDependentTexts() {
   }
 }
 
+function updateThemesPanelImage() {
+  if (!els.panelImage) return;
+
+  els.panelImage.src =
+    state.currentLanguage === "en"
+      ? "assets/panel-temas-en.png"
+      : "assets/panel-temas-fr.png";
+}
+
 
 async function resumeSavedGame() {
   const snapshot = loadSavedGame();
@@ -2010,6 +2029,7 @@ function bindTutorialBubble() {
   updateAccentField();
   bindTutorialBubble();
   preloadImages();
+  updateThemesPanelImage();
   
 
   document.addEventListener("click", () => {

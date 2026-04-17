@@ -701,6 +701,18 @@ select{
   transform:translateY(0);
 }
 
+#screenConfig.screen-transition,
+#screenConfig.screen-visible{
+  transform: none !important;
+}
+
+
+/* ===== Configuración: evitar que el botón fixed quede atrapado ===== */
+#screenConfig.screen-transition,
+#screenConfig.screen-visible{
+  transform: none !important;
+}
+
 /* ===== Botón global de audio ===== */
 .audio-toggle{
   position: fixed;
@@ -1900,50 +1912,10 @@ body{
 }
 
 .btn-back-floating{
-  position: absolute;
-  top: 28px;      /* ajusta fino */
-  left: 40px;     /* ajusta fino */
-
-  background: none;
-  border: none;
-
-  color: #f5d774;
-  font-size: 18px;
-  font-weight: bold;
-  font-family: inherit;
-
-  cursor: pointer;
-
-  text-shadow:
-    0 2px 4px rgba(0,0,0,0.6),
-    0 0 6px rgba(255,215,120,0.3);
-
-  transition: all 0.2s ease;
-}
-
-.btn-back-floating:hover{
-  transform: translateX(-3px);
-  color: #fff4c2;
-}
-
-.btn-back-floating:active{
-  transform: translateX(-1px);
-}
-
-#screenConfig{
-  position: relative;
-}
-
-#screenConfig select option{
-  color: #111827;
-  background: #f6e7b8;
-}
-
-.btn-back-floating{
-  position: absolute;
-  top: 95px;
-  left: 80px;
-  z-index: 10;
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 9999;
 
   appearance: none;
   background: none !important;
@@ -1956,13 +1928,13 @@ body{
 
 .btn-back-floating img{
   display: block;
-  width: 100px;
+  width: 140px;
   height: auto;
 }
 
 .btn-back-floating:hover{
-  transform: translateX(-2px);
-  filter: brightness(1.06);
+  transform: translateY(-1px);
+  filter: brightness(1.04);
 }
 
 /* =========================
@@ -2855,15 +2827,6 @@ body{
 
   .phase-options{
     gap: 14px 16px !important;
-  }
-
-  .btn-back-floating{
-    top: 42px !important;
-    left: 92px !important;
-  }
-
-  .btn-back-floating img{
-    width: 92px !important;
   }
 
   .config-actions{
@@ -4770,3 +4733,11 @@ a,
   cursor: url("assets/cursor-vocabulapp.png") 2 2, pointer !important;
 }
 
+/* ===== FONDO BIBLIOTECA SOLO EN TEMAS (FIX FLASH INICIAL) ===== */
+
+#screenThemes{
+  background-image: url("assets/biblioteca.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
