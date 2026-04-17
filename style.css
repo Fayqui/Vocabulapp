@@ -14,7 +14,14 @@
 body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: var(--bg);
+
+  /* 🔥 FONDO GLOBAL (clave) */
+  background-image: url("assets/biblioteca.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
   color: var(--text);
   cursor: url("assets/cursor-vocabulapp.png") 2 2, auto;
 }
@@ -4740,4 +4747,9 @@ a,
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
+}
+
+#screenThemes,
+#screenConfig {
+  background: transparent !important;
 }
